@@ -22,8 +22,14 @@ Then, you can paste the `error` or `warning` description directly to the search 
 
 ## How to Use
 1. Select the `error` or `warning` in the Issue Navigator;
+![Step1](https://github.com/hanton/CopyIssue-Xcode-Plugin/blob/master/Step1.png)
+
 2. Use shortcut `Command+Shift+v`, or tap the "Copy Issue" menu in the Edit Menu;
+![Step2](https://github.com/hanton/CopyIssue-Xcode-Plugin/blob/master/Step2.png)
+
 3. Paste the Issue Description to the search engine.
+![Step3](https://github.com/hanton/CopyIssue-Xcode-Plugin/blob/master/Step3.png)
+
 
 
 ## Install
