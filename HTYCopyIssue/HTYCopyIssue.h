@@ -8,7 +8,7 @@
 
 #import <AppKit/AppKit.h>
 
-@interface HTYCopyIssue : NSObject
+@interface HTYCopyIssue : NSObject <NSMenuDelegate>
 
 + (instancetype)sharedPlugin;
 

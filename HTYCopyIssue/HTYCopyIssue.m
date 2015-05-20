@@ -12,6 +12,10 @@
 static HTYCopyIssue *sharedPlugin;
 
 @implementation HTYCopyIssue
+{
+  NSMenuItem *_googleItem;
+  NSMenuItem *_stackoverflowItem;
+}
 
 + (void)pluginDidLoad:(NSBundle *)plugin
 {
@@ -40,60 +44,71 @@ static HTYCopyIssue *sharedPlugin;
       [actionMenuItem setTarget:self];
       [[menuItem submenu] insertItem:actionMenuItem atIndex:5];
       
-      Class textViewClass = NSClassFromString(@"DVTSourceTextView");
-      NSError *error = nil;
-      [textViewClass aspect_hookSelector:@selector(setDelegate:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo){
-        NSLog(@"Class: %@/nInstance: %@\nArguments: %@", [aspectInfo.instance class], aspectInfo.instance, aspectInfo.arguments);
-      } error:&error];
-      
-      Class editorClass = NSClassFromString(@"IDESourceCodeEditor");
-      SEL delegateSelector = NSSelectorFromString(@"setupTextViewContextMenuWithMenu:");
-      [editorClass aspect_hookSelector:delegateSelector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
-        
-        NSMenu *contextMenu = [aspectInfo.arguments firstObject];
-        NSMenuItem *showIssueItem = [contextMenu itemWithTitle:@"Show Issue"];
-        if (!showIssueItem) {
-          return;
-        }
-        
-        if (![showIssueItem isEnabled]) {
-          NSLog(@"%@ is not enabled. Won't add custom item", showIssueItem);
-          return;
-        }
-        
-        NSLog(@"%@ is not enabled. Won't add custom item", showIssueItem);
-        
-        
-        NSMenuItem* foobarItem = [[NSMenuItem alloc] initWithTitle:@"Foo Bar" action:@selector(doMenuAction) keyEquivalent:@"V"];
-        [foobarItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
-        [foobarItem setTarget:self];
-        [contextMenu insertItem:foobarItem atIndex:5];
-      } error:&error];
-      
-      if (error) {
-        NSLog(@"*** ERROR: %@", error);
-      }
-      
-      SEL guttterContextMenuDelegate = NSSelectorFromString(@"setupGutterContextMenuWithMenu:");
-      [editorClass aspect_hookSelector:guttterContextMenuDelegate withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
-        NSMenuItem* foobarItem = [[NSMenuItem alloc] initWithTitle:@"Foo Bar" action:@selector(doMenuAction) keyEquivalent:@"V"];
-        [foobarItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
-        [foobarItem setTarget:self];
-        NSMenu *contextMenu = [aspectInfo.arguments firstObject];
-        [contextMenu insertItem:foobarItem atIndex:5];
-      } error:&error];
+      NSMenu* searchSubmenu = [[NSMenu alloc] init];
+      [searchSubmenu setAutoenablesItems:YES];
+      [searchSubmenu setDelegate:self];
+      NSMenuItem* googleItem = [[NSMenuItem alloc] initWithTitle:@"Search Google" action:@selector(searchGoogleAction:) keyEquivalent:@""];
+      [googleItem setTarget:self];
+      [searchSubmenu addItem:googleItem];
+      NSMenuItem* soItem = [[NSMenuItem alloc] initWithTitle:@"Search Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@""];
+      [soItem setTarget:self];
+      [searchSubmenu addItem:soItem];
+      [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:6];
 
-      if (error) {
-        NSLog(@"*** ERROR: %@", error);
-      }
+      NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:@"ASK THE INTERNET" action:nil keyEquivalent:@""];
+      [submenuItem setSubmenu:searchSubmenu];
+      
+      [[menuItem submenu] insertItem:submenuItem atIndex:7];
+      [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:8];
     }
   }
   return self;
 }
 
-// Sample Action, for menu item:
-- (void)doMenuAction
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
+  if (menuItem == _googleItem || menuItem || _stackoverflowItem) {
+    return [self shouldEnableSearchMenuItems];
+  }
+  return NO;
+}
+
+- (BOOL)shouldEnableSearchMenuItems
+{
+  return [[self copyMenuItem] isEnabled];
+}
+
+- (NSMenuItem *)copyMenuItem
+{
+  NSMenuItem* editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
+  NSMenu* menu = editMenuItem.submenu;
+  NSMenuItem* copyItem = [menu itemWithTitle:@"Copy"];
+  return copyItem;
+}
+
+- (NSString *)searchString
+{
+  NSString *issueString = [self formattedIssueString];
+  NSRange range = [issueString rangeOfString:@"'"];
+  if (range.location != NSNotFound) {
+    return [issueString substringToIndex:range.location];
+  }
+  return issueString;
+}
+
+#pragma mark - Actions
+
+- (void)searchGoogleAction:(id)sender
+{
+  [self openIssueInBrowser:[self searchString] urlPrefix:@"https://www.google.de?#q="];
+}
+
+- (void)searchStackoverflowAction:(id)sender
+{
+  [self openIssueInBrowser:[self searchString] urlPrefix:@"http://stackoverflow.com/search?q="];
+}
+
+- (NSString *)formattedIssueString {
   // Clear the Pasteboard
   NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
   [pasteboard clearContents];
@@ -118,31 +133,38 @@ static HTYCopyIssue *sharedPlugin;
     NSArray* objectsToCopy = @[formatedString];
     [pasteboard clearContents];
     [pasteboard writeObjects:objectsToCopy];
-
-    [self openIssueInBrowser:formatedString];
+    
+    return formatedString;
   }
+  
+  return nil;
 }
 
-- (void)openIssueInBrowser:(NSString*)issue
+// Sample Action, for menu item:
+- (void)doMenuAction
 {
-    if (issue.length >0) {
-        NSURL *urlToOpen = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.de?gfe_rd=cr&#q=%@", [issue stringByAddingPercentEscapesUsingEncoding:
-                                                                                                                      NSUTF8StringEncoding]]];
-        if(urlToOpen) {
-            // Handle special cases
-            @try {
-                [[NSWorkspace sharedWorkspace] openURLs:@[urlToOpen]
-                                withAppBundleIdentifier:nil
-                                                options:NSWorkspaceLaunchDefault
-                         additionalEventParamDescriptor:nil
-                                      launchIdentifiers:nil];
-            }
-            
-            @catch (NSException *exception) {
-                NSLog(@"Exception: %@", [exception description]);
-            }
-        }
+  [self formattedIssueString];
+}
+
+- (void)openIssueInBrowser:(NSString*)issue urlPrefix:(NSString *)urlPrefix
+{
+  if (issue.length >0) {
+    NSURL *urlToOpen = [NSURL URLWithString:[urlPrefix stringByAppendingString:[issue stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    if(urlToOpen) {
+      // Handle special cases
+      @try {
+        [[NSWorkspace sharedWorkspace] openURLs:@[urlToOpen]
+                        withAppBundleIdentifier:nil
+                                        options:NSWorkspaceLaunchDefault
+                 additionalEventParamDescriptor:nil
+                              launchIdentifiers:nil];
+      }
+      
+      @catch (NSException *exception) {
+        NSLog(@"Exception: %@", [exception description]);
+      }
     }
+  }
 }
 
 - (void)dealloc
