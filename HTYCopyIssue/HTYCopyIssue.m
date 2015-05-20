@@ -46,14 +46,15 @@ static HTYCopyIssue *sharedPlugin;
             [[menuItem submenu] insertItem:actionMenuItem atIndex:5];
             
             NSMenu* searchSubmenu = [[NSMenu alloc] init];
-            [searchSubmenu setAutoenablesItems:YES];
             [searchSubmenu setDelegate:self];
             
-            _googleItem = [[NSMenuItem alloc] initWithTitle:@"Search Google" action:@selector(searchGoogleAction:) keyEquivalent:@""];
+            _googleItem = [[NSMenuItem alloc] initWithTitle:@"Ask Google" action:@selector(searchGoogleAction:) keyEquivalent:@"g"];
+            [_googleItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
             [_googleItem setTarget:self];
             [searchSubmenu addItem:_googleItem];
             
-            _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Search Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@""];
+            _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Ask Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@"s"];
+            [_stackoverflowItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
             [_stackoverflowItem setTarget:self];
             [searchSubmenu addItem:_stackoverflowItem];
             
