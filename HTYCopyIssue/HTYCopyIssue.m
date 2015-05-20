@@ -15,6 +15,7 @@ static HTYCopyIssue *sharedPlugin;
 {
     NSMenuItem *_googleItem;
     NSMenuItem *_stackoverflowItem;
+    NSMenuItem *_searchMenuItem;
 }
 
 + (void)pluginDidLoad:(NSBundle *)plugin
@@ -47,18 +48,21 @@ static HTYCopyIssue *sharedPlugin;
             NSMenu* searchSubmenu = [[NSMenu alloc] init];
             [searchSubmenu setAutoenablesItems:YES];
             [searchSubmenu setDelegate:self];
-            NSMenuItem* googleItem = [[NSMenuItem alloc] initWithTitle:@"Search Google" action:@selector(searchGoogleAction:) keyEquivalent:@""];
-            [googleItem setTarget:self];
-            [searchSubmenu addItem:googleItem];
-            NSMenuItem* soItem = [[NSMenuItem alloc] initWithTitle:@"Search Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@""];
-            [soItem setTarget:self];
-            [searchSubmenu addItem:soItem];
+            
+            _googleItem = [[NSMenuItem alloc] initWithTitle:@"Search Google" action:@selector(searchGoogleAction:) keyEquivalent:@""];
+            [_googleItem setTarget:self];
+            [searchSubmenu addItem:_googleItem];
+            
+            _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Search Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@""];
+            [_stackoverflowItem setTarget:self];
+            [searchSubmenu addItem:_stackoverflowItem];
+            
             [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:6];
             
-            NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:@"ASK THE INTERNET" action:nil keyEquivalent:@""];
-            [submenuItem setSubmenu:searchSubmenu];
+            _searchMenuItem = [[NSMenuItem alloc] initWithTitle:@"ASK THE INTERNET" action:nil keyEquivalent:@""];
+            [_searchMenuItem setSubmenu:searchSubmenu];
             
-            [[menuItem submenu] insertItem:submenuItem atIndex:7];
+            [[menuItem submenu] insertItem:_searchMenuItem atIndex:7];
             [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:8];
         }
     }
@@ -67,7 +71,7 @@ static HTYCopyIssue *sharedPlugin;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
-    if (menuItem == _googleItem || menuItem || _stackoverflowItem) {
+    if (menuItem == _googleItem || menuItem == _stackoverflowItem || _searchMenuItem) {
         return [self shouldEnableSearchMenuItems];
     }
     return NO;
