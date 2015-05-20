@@ -118,7 +118,31 @@ static HTYCopyIssue *sharedPlugin;
     NSArray* objectsToCopy = @[formatedString];
     [pasteboard clearContents];
     [pasteboard writeObjects:objectsToCopy];
+
+    [self openIssueInBrowser:formatedString];
   }
+}
+
+- (void)openIssueInBrowser:(NSString*)issue
+{
+    if (issue.length >0) {
+        NSURL *urlToOpen = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.google.de?gfe_rd=cr&#q=%@", [issue stringByAddingPercentEscapesUsingEncoding:
+                                                                                                                      NSUTF8StringEncoding]]];
+        if(urlToOpen) {
+            // Handle special cases
+            @try {
+                [[NSWorkspace sharedWorkspace] openURLs:@[urlToOpen]
+                                withAppBundleIdentifier:nil
+                                                options:NSWorkspaceLaunchDefault
+                         additionalEventParamDescriptor:nil
+                                      launchIdentifiers:nil];
+            }
+            
+            @catch (NSException *exception) {
+                NSLog(@"Exception: %@", [exception description]);
+            }
+        }
+    }
 }
 
 - (void)dealloc
