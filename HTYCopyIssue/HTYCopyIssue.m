@@ -26,7 +26,7 @@ static HTYCopyIssue *sharedPlugin;
 
 + (instancetype)sharedPlugin
 {
-  return _sharedPlugin;
+  return sharedPlugin;
 }
 
 - (id)initWithBundle:(NSBundle *)plugin
