@@ -7,6 +7,7 @@
 //
 
 #import "HTYCopyIssue.h"
+#import "Aspects.h"
 
 static HTYCopyIssue *sharedPlugin;
 
@@ -25,7 +26,7 @@ static HTYCopyIssue *sharedPlugin;
 
 + (instancetype)sharedPlugin
 {
-  return sharedPlugin;
+  return _sharedPlugin;
 }
 
 - (id)initWithBundle:(NSBundle *)plugin
@@ -38,6 +39,53 @@ static HTYCopyIssue *sharedPlugin;
       [actionMenuItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
       [actionMenuItem setTarget:self];
       [[menuItem submenu] insertItem:actionMenuItem atIndex:5];
+      
+      Class textViewClass = NSClassFromString(@"DVTSourceTextView");
+      NSError *error = nil;
+      [textViewClass aspect_hookSelector:@selector(setDelegate:) withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo){
+        NSLog(@"Class: %@/nInstance: %@\nArguments: %@", [aspectInfo.instance class], aspectInfo.instance, aspectInfo.arguments);
+      } error:&error];
+      
+      Class editorClass = NSClassFromString(@"IDESourceCodeEditor");
+      SEL delegateSelector = NSSelectorFromString(@"setupTextViewContextMenuWithMenu:");
+      [editorClass aspect_hookSelector:delegateSelector withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
+        
+        NSMenu *contextMenu = [aspectInfo.arguments firstObject];
+        NSMenuItem *showIssueItem = [contextMenu itemWithTitle:@"Show Issue"];
+        if (!showIssueItem) {
+          return;
+        }
+        
+        if (![showIssueItem isEnabled]) {
+          NSLog(@"%@ is not enabled. Won't add custom item", showIssueItem);
+          return;
+        }
+        
+        NSLog(@"%@ is not enabled. Won't add custom item", showIssueItem);
+        
+        
+        NSMenuItem* foobarItem = [[NSMenuItem alloc] initWithTitle:@"Foo Bar" action:@selector(doMenuAction) keyEquivalent:@"V"];
+        [foobarItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
+        [foobarItem setTarget:self];
+        [contextMenu insertItem:foobarItem atIndex:5];
+      } error:&error];
+      
+      if (error) {
+        NSLog(@"*** ERROR: %@", error);
+      }
+      
+      SEL guttterContextMenuDelegate = NSSelectorFromString(@"setupGutterContextMenuWithMenu:");
+      [editorClass aspect_hookSelector:guttterContextMenuDelegate withOptions:AspectPositionAfter usingBlock:^(id<AspectInfo> aspectInfo) {
+        NSMenuItem* foobarItem = [[NSMenuItem alloc] initWithTitle:@"Foo Bar" action:@selector(doMenuAction) keyEquivalent:@"V"];
+        [foobarItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
+        [foobarItem setTarget:self];
+        NSMenu *contextMenu = [aspectInfo.arguments firstObject];
+        [contextMenu insertItem:foobarItem atIndex:5];
+      } error:&error];
+
+      if (error) {
+        NSLog(@"*** ERROR: %@", error);
+      }
     }
   }
   return self;
