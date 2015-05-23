@@ -37,37 +37,43 @@ static HTYCopyIssue *sharedPlugin;
 - (id)initWithBundle:(NSBundle *)plugin
 {
     if (self = [super init]) {
-        // Add the new "Copy Issue Subtitle" menu
-        NSMenuItem* menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
-        if (menuItem) {
-            NSMenuItem* actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Copy Issue" action:@selector(doMenuAction) keyEquivalent:@"V"];
-            [actionMenuItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
-            [actionMenuItem setTarget:self];
-            [[menuItem submenu] insertItem:actionMenuItem atIndex:5];
-            
-            NSMenu* searchSubmenu = [[NSMenu alloc] init];
-            [searchSubmenu setDelegate:self];
-            
-            _googleItem = [[NSMenuItem alloc] initWithTitle:@"Ask Google" action:@selector(searchGoogleAction:) keyEquivalent:@"g"];
-            [_googleItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
-            [_googleItem setTarget:self];
-            [searchSubmenu addItem:_googleItem];
-            
-            _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Ask Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@"s"];
-            [_stackoverflowItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
-            [_stackoverflowItem setTarget:self];
-            [searchSubmenu addItem:_stackoverflowItem];
-            
-            [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:6];
-            
-            _searchMenuItem = [[NSMenuItem alloc] initWithTitle:@"ASK THE INTERNET" action:nil keyEquivalent:@""];
-            [_searchMenuItem setSubmenu:searchSubmenu];
-            
-            [[menuItem submenu] insertItem:_searchMenuItem atIndex:7];
-            [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:8];
-        }
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self createMenuItem];
+        }];
     }
     return self;
+}
+
+- (void)createMenuItem
+{
+    NSMenuItem* menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
+    if (menuItem) {
+        NSMenuItem* actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Copy Issue" action:@selector(doMenuAction) keyEquivalent:@"V"];
+        [actionMenuItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
+        [actionMenuItem setTarget:self];
+        [[menuItem submenu] insertItem:actionMenuItem atIndex:5];
+        
+        NSMenu* searchSubmenu = [[NSMenu alloc] init];
+        [searchSubmenu setDelegate:self];
+        
+        _googleItem = [[NSMenuItem alloc] initWithTitle:@"Ask Google" action:@selector(searchGoogleAction:) keyEquivalent:@"g"];
+        [_googleItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
+        [_googleItem setTarget:self];
+        [searchSubmenu addItem:_googleItem];
+        
+        _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Ask Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@"s"];
+        [_stackoverflowItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
+        [_stackoverflowItem setTarget:self];
+        [searchSubmenu addItem:_stackoverflowItem];
+        
+        [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:6];
+        
+        _searchMenuItem = [[NSMenuItem alloc] initWithTitle:@"ASK THE INTERNET" action:nil keyEquivalent:@""];
+        [_searchMenuItem setSubmenu:searchSubmenu];
+        
+        [[menuItem submenu] insertItem:_searchMenuItem atIndex:7];
+        [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:8];
+    }    
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
