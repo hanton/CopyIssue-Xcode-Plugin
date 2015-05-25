@@ -21,7 +21,7 @@ Then, you can paste it directly to the search engine for finding the solution. O
 
 ![](screenshots/ScreenShot.png?raw=true)
 
-![](screenshots/ScreenShot_Menu.png?raw=true)
+![](screenshots/Screenshot_Menu.png?raw=true)
 
 #### Strip content inside quotation marks
 
