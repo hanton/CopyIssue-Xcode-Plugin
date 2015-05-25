@@ -10,13 +10,13 @@
 #import "Aspects.h"
 
 static HTYCopyIssue *sharedPlugin;
+static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 
 @implementation HTYCopyIssue
 {
     NSMenuItem *_googleItem;
     NSMenuItem *_stackoverflowItem;
     NSMenuItem *_searchMenuItem;
-    BOOL _stripInsideQuotationMarks;
     NSMenuItem *_toggleStripQuotationItem;
 }
 
@@ -39,12 +39,17 @@ static HTYCopyIssue *sharedPlugin;
 - (id)initWithBundle:(NSBundle *)plugin
 {
     if (self = [super init]) {
-        _stripInsideQuotationMarks = YES;
+        [[NSUserDefaults standardUserDefaults] registerDefaults:@{ HTYStripQuotationMarksKey : @YES }];
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self createMenuItem];
         }];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)createMenuItem
@@ -59,12 +64,12 @@ static HTYCopyIssue *sharedPlugin;
         NSMenu* searchSubmenu = [[NSMenu alloc] init];
         [searchSubmenu setDelegate:self];
         
-        _googleItem = [[NSMenuItem alloc] initWithTitle:@"Ask Google" action:@selector(searchGoogleAction:) keyEquivalent:@"g"];
+        _googleItem = [[NSMenuItem alloc] initWithTitle:@"Ask Google" action:@selector(searchGoogleAction:) keyEquivalent:@"G"];
         [_googleItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
         [_googleItem setTarget:self];
         [searchSubmenu addItem:_googleItem];
         
-        _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Ask Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@"s"];
+        _stackoverflowItem = [[NSMenuItem alloc] initWithTitle:@"Ask Stackoverflow" action:@selector(searchStackoverflowAction:) keyEquivalent:@"S"];
         [_stackoverflowItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSAlternateKeyMask];
         [_stackoverflowItem setTarget:self];
         [searchSubmenu addItem:_stackoverflowItem];
@@ -73,7 +78,8 @@ static HTYCopyIssue *sharedPlugin;
         
         _toggleStripQuotationItem = [[NSMenuItem alloc] initWithTitle:@"Strip content inside quotation mark" action:@selector(toggleStripQuotationMarks:) keyEquivalent:@""];
         [_toggleStripQuotationItem setTarget:self];
-        [_toggleStripQuotationItem setState:NSOnState];
+        BOOL stripQuotationMark = [[NSUserDefaults standardUserDefaults] boolForKey:HTYStripQuotationMarksKey];
+        [_toggleStripQuotationItem setState:(stripQuotationMark) ? NSOnState : NSOffState];
         [searchSubmenu addItem:_toggleStripQuotationItem];
         
         [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:6];
@@ -100,7 +106,7 @@ static HTYCopyIssue *sharedPlugin;
 
 - (NSMenuItem *)copyMenuItem
 {
-    NSMenuItem* editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
+    NSMenuItem* editMenuItem = (NSMenu *)[[NSApp mainMenu] itemWithTitle:@"Edit"];
     NSMenu* menu = editMenuItem.submenu;
     NSMenuItem* copyItem = [menu itemWithTitle:@"Copy"];
     return copyItem;
@@ -110,7 +116,7 @@ static HTYCopyIssue *sharedPlugin;
 {
     NSString *issueString = [self formattedIssueString];
     
-    if (!_stripInsideQuotationMarks) return issueString;
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:HTYStripQuotationMarksKey]) return issueString;
 
     NSError* error = nil;
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"'[^']*'" options:0 error:&error];
@@ -174,8 +180,9 @@ static HTYCopyIssue *sharedPlugin;
 
 - (void)toggleStripQuotationMarks:(NSMenuItem *)sender
 {
-    _stripInsideQuotationMarks = !_stripInsideQuotationMarks;
-    [sender setState:(_stripInsideQuotationMarks) ? NSOnState : NSOffState];
+    BOOL currentStripQuotationState = [sender state] == NSOnState;
+    [[NSUserDefaults standardUserDefaults] setBool:!currentStripQuotationState forKey:HTYStripQuotationMarksKey];
+    [sender setState:(currentStripQuotationState) ? NSOffState : NSOnState];
 }
 
 - (void)openIssueInBrowser:(NSString*)issue urlPrefix:(NSString *)urlPrefix
@@ -197,11 +204,6 @@ static HTYCopyIssue *sharedPlugin;
             }
         }
     }
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
