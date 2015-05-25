@@ -16,6 +16,8 @@ static HTYCopyIssue *sharedPlugin;
     NSMenuItem *_googleItem;
     NSMenuItem *_stackoverflowItem;
     NSMenuItem *_searchMenuItem;
+    BOOL _stripInsideQuotationMarks;
+    NSMenuItem *_toggleStripQuotationItem;
 }
 
 + (void)pluginDidLoad:(NSBundle *)plugin
@@ -37,6 +39,7 @@ static HTYCopyIssue *sharedPlugin;
 - (id)initWithBundle:(NSBundle *)plugin
 {
     if (self = [super init]) {
+        _stripInsideQuotationMarks = YES;
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self createMenuItem];
         }];
@@ -66,6 +69,13 @@ static HTYCopyIssue *sharedPlugin;
         [_stackoverflowItem setTarget:self];
         [searchSubmenu addItem:_stackoverflowItem];
         
+        [searchSubmenu addItem:[NSMenuItem separatorItem]];
+        
+        _toggleStripQuotationItem = [[NSMenuItem alloc] initWithTitle:@"Strip content inside quotation mark" action:@selector(toggleStripQuotationMarks:) keyEquivalent:@""];
+        [_toggleStripQuotationItem setTarget:self];
+        [_toggleStripQuotationItem setState:NSOnState];
+        [searchSubmenu addItem:_toggleStripQuotationItem];
+        
         [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:6];
         
         _searchMenuItem = [[NSMenuItem alloc] initWithTitle:@"ASK THE INTERNET" action:nil keyEquivalent:@""];
@@ -73,14 +83,13 @@ static HTYCopyIssue *sharedPlugin;
         
         [[menuItem submenu] insertItem:_searchMenuItem atIndex:7];
         [[menuItem submenu] insertItem:[NSMenuItem separatorItem] atIndex:8];
-    }    
+    }
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
-    if (menuItem == _googleItem || menuItem == _stackoverflowItem || _searchMenuItem) {
-        return [self shouldEnableSearchMenuItems];
-    }
+    if (menuItem == _toggleStripQuotationItem) return YES;
+    if (menuItem == _googleItem || menuItem == _stackoverflowItem) return [self shouldEnableSearchMenuItems];
     return NO;
 }
 
@@ -100,6 +109,9 @@ static HTYCopyIssue *sharedPlugin;
 - (NSString *)searchString
 {
     NSString *issueString = [self formattedIssueString];
+    
+    if (!_stripInsideQuotationMarks) return issueString;
+
     NSError* error = nil;
     NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:@"'[^']*'" options:0 error:&error];
     if (!regex) {
@@ -155,10 +167,15 @@ static HTYCopyIssue *sharedPlugin;
     return nil;
 }
 
-// Sample Action, for menu item:
 - (void)doMenuAction
 {
     [self formattedIssueString];
+}
+
+- (void)toggleStripQuotationMarks:(NSMenuItem *)sender
+{
+    _stripInsideQuotationMarks = !_stripInsideQuotationMarks;
+    [sender setState:(_stripInsideQuotationMarks) ? NSOnState : NSOffState];
 }
 
 - (void)openIssueInBrowser:(NSString*)issue urlPrefix:(NSString *)urlPrefix
