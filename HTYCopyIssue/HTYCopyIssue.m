@@ -132,7 +132,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 
 - (void)searchGoogleAction:(id)sender
 {
-    [self openIssueInBrowser:[self searchString] urlPrefix:@"https://www.google.de?#q="];
+    [self openIssueInBrowser:[self searchString] urlPrefix:@"https://www.google.com?#q="];
 }
 
 - (void)searchStackoverflowAction:(id)sender
