@@ -7,7 +7,6 @@
 //
 
 #import "HTYCopyIssue.h"
-#import "Aspects.h"
 
 static HTYCopyIssue *sharedPlugin;
 static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
@@ -106,7 +105,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 
 - (NSMenuItem *)copyMenuItem
 {
-    NSMenuItem* editMenuItem = (NSMenu *)[[NSApp mainMenu] itemWithTitle:@"Edit"];
+    NSMenuItem* editMenuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
     NSMenu* menu = editMenuItem.submenu;
     NSMenuItem* copyItem = [menu itemWithTitle:@"Copy"];
     return copyItem;

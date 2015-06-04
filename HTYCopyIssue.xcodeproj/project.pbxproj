@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		172C1F671B0C941300BE7B1B /* Aspects.m in Sources */ = {isa = PBXBuildFile; fileRef = 172C1F661B0C941300BE7B1B /* Aspects.m */; };
 		402F236D1A7FBB2D007AB6BE /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402F236C1A7FBB2D007AB6BE /* AppKit.framework */; };
 		402F236F1A7FBB2D007AB6BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402F236E1A7FBB2D007AB6BE /* Foundation.framework */; };
 		402F23741A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = 402F23731A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme */; };
@@ -15,8 +14,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		172C1F651B0C941300BE7B1B /* Aspects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Aspects.h; sourceTree = "<group>"; };
-		172C1F661B0C941300BE7B1B /* Aspects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Aspects.m; sourceTree = "<group>"; };
 		402F23691A7FBB2D007AB6BE /* HTYCopyIssue.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HTYCopyIssue.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		402F236C1A7FBB2D007AB6BE /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		402F236E1A7FBB2D007AB6BE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -39,15 +36,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		172C1F681B0C941600BE7B1B /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				172C1F651B0C941300BE7B1B /* Aspects.h */,
-				172C1F661B0C941300BE7B1B /* Aspects.m */,
-			);
-			name = Vendor;
-			sourceTree = "<group>";
-		};
 		402F23601A7FBB2D007AB6BE = {
 			isa = PBXGroup;
 			children = (
@@ -77,7 +65,6 @@
 		402F23701A7FBB2D007AB6BE /* HTYCopyIssue */ = {
 			isa = PBXGroup;
 			children = (
-				172C1F681B0C941600BE7B1B /* Vendor */,
 				402F23751A7FBB2D007AB6BE /* HTYCopyIssue.h */,
 				402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */,
 				402F23711A7FBB2D007AB6BE /* Supporting Files */,
@@ -162,7 +149,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				402F23771A7FBB2D007AB6BE /* HTYCopyIssue.m in Sources */,
-				172C1F671B0C941300BE7B1B /* Aspects.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
