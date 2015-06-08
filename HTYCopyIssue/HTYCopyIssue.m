@@ -54,7 +54,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 
 - (void)createMenuItem
 {
-    NSMenuItem* menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];sfdssdfdfs
+    NSMenuItem* menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
     if (menuItem) {
         _copyIssueMenuItem = [[NSMenuItem alloc] initWithTitle:@"Copy Issue" action:@selector(doMenuAction) keyEquivalent:@"V"];
         [_copyIssueMenuItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
