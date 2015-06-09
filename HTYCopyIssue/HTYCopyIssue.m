@@ -13,6 +13,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 
 @implementation HTYCopyIssue
 {
+    NSMenuItem *_copyIssueMenuItem;
     NSMenuItem *_googleItem;
     NSMenuItem *_stackoverflowItem;
     NSMenuItem *_searchMenuItem;
@@ -55,10 +56,10 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 {
     NSMenuItem* menuItem = [[NSApp mainMenu] itemWithTitle:@"Edit"];
     if (menuItem) {
-        NSMenuItem* actionMenuItem = [[NSMenuItem alloc] initWithTitle:@"Copy Issue" action:@selector(doMenuAction) keyEquivalent:@"V"];
-        [actionMenuItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
-        [actionMenuItem setTarget:self];
-        [[menuItem submenu] insertItem:actionMenuItem atIndex:5];
+        _copyIssueMenuItem = [[NSMenuItem alloc] initWithTitle:@"Copy Issue" action:@selector(doMenuAction) keyEquivalent:@"V"];
+        [_copyIssueMenuItem setKeyEquivalentModifierMask:NSShiftKeyMask | NSCommandKeyMask];
+        [_copyIssueMenuItem setTarget:self];
+        [[menuItem submenu] insertItem:_copyIssueMenuItem atIndex:5];
         
         NSMenu* searchSubmenu = [[NSMenu alloc] init];
         [searchSubmenu setDelegate:self];
@@ -94,7 +95,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
     if (menuItem == _toggleStripQuotationItem) return YES;
-    if (menuItem == _googleItem || menuItem == _stackoverflowItem) return [self shouldEnableSearchMenuItems];
+    if (menuItem == _googleItem || menuItem == _stackoverflowItem || menuItem == _copyIssueMenuItem) return [self shouldEnableSearchMenuItems];
     return NO;
 }
 
@@ -150,7 +151,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     NSMenu* menu = editMenuItem.submenu;
     [menu performActionForItemAtIndex:4];
     
-    // Formate Issue
+    // Format Issue
     NSArray* classes = [[NSArray alloc] initWithObjects:[NSString class], nil];
     NSDictionary* options = [NSDictionary dictionary];
     NSArray* copiedItems = [pasteboard readObjectsForClasses:classes options:options];
