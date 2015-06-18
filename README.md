@@ -1,4 +1,5 @@
-# Makes Copy Xcode Issue Description Easy - Support Finding Answers in Google or StackOverflow Directly
+# Makes Copy Xcode Issue Description Easy
+## Support Finding Answers in Google or StackOverflow Directly
 
 The plugin is useful when you want to search for solutions for any Xcode issues e.g. `error` or `warning`.
 
