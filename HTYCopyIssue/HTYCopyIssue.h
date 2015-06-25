@@ -7,8 +7,12 @@
 //
 
 #import <AppKit/AppKit.h>
+#import <objc/objc-runtime.h>
 
-@interface HTYCopyIssue : NSObject <NSMenuDelegate>
+@interface HTYCopyIssue : NSObject <NSMenuDelegate, NSWindowDelegate>
+
+@property (strong, nonatomic) NSMenu *contextMenu;
+@property (strong, nonatomic) NSMenu *issueNavigatorContextMenu;
 
 + (instancetype)sharedPlugin;
 
