@@ -11,6 +11,7 @@
 		402F236F1A7FBB2D007AB6BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402F236E1A7FBB2D007AB6BE /* Foundation.framework */; };
 		402F23741A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = 402F23731A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme */; };
 		402F23771A7FBB2D007AB6BE /* HTYCopyIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = 402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */; };
+		FA1FAF991B3C722100AFC350 /* Aspects in Resources */ = {isa = PBXBuildFile; fileRef = FA1FAF981B3C722100AFC350 /* Aspects */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		402F23731A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = HTYCopyIssue.xcscheme; path = HTYCopyIssue.xcodeproj/xcshareddata/xcschemes/HTYCopyIssue.xcscheme; sourceTree = SOURCE_ROOT; };
 		402F23751A7FBB2D007AB6BE /* HTYCopyIssue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTYCopyIssue.h; sourceTree = "<group>"; };
 		402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTYCopyIssue.m; sourceTree = "<group>"; };
+		FA1FAF981B3C722100AFC350 /* Aspects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Aspects; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 			children = (
 				402F23751A7FBB2D007AB6BE /* HTYCopyIssue.h */,
 				402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */,
+				FA1FAF981B3C722100AFC350 /* Aspects */,
 				402F23711A7FBB2D007AB6BE /* Supporting Files */,
 			);
 			path = HTYCopyIssue;
@@ -137,6 +140,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA1FAF991B3C722100AFC350 /* Aspects in Resources */,
 				402F23741A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,6 +236,10 @@
 				DSTROOT = "$(HOME)";
 				INFOPLIST_FILE = HTYCopyIssue/Info.plist;
 				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xcplugin;
@@ -246,6 +254,10 @@
 				DSTROOT = "$(HOME)";
 				INFOPLIST_FILE = HTYCopyIssue/Info.plist;
 				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xcplugin;
