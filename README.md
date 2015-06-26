@@ -32,13 +32,14 @@ Per default, everything inside `'` and `"` is removed from the search query. Typ
 1. Select the `error` or `warning` in the Issue Navigator;                      
 ![Step1](screenshots/Step1.png?raw=true)
 
-2. Use shortcut `⌘⇧C`, or click the "Copy Issue" menu in the Edit Menu;
+2. Use shortcut `⌘⇧C`, or click the "Copy Issue" menu item in the Edit Menu;
 ![Step2](screenshots/Step2.png?raw=true)
+
+Alternatively, click the Copy Issue menu item in the context menu;
+![Step2Alternate](screenshots/Step2Alternate.png?raw=true)
 
 3. Paste the Issue Description to the search engine.
 ![Step3](screenshots/Step3.png?raw=true)
-
-
 
 ## Install
 
@@ -58,4 +59,4 @@ OR
 
 
 ## TODO
-- Add 'Copy Issue' to right click's context menu
+- Add 'Copy Issue' to right click's context menu in the editor
