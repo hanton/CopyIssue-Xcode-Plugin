@@ -14,7 +14,21 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "890A4B3E171F031300AFE577"
+               BlueprintIdentifier = "B9FA80F9B538223E0F2850D6"
+               BuildableName = "libPods-HTYCopyIssue-DTXcodeUtils.a"
+               BlueprintName = "Pods-HTYCopyIssue-DTXcodeUtils"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "402F23681A7FBB2D007AB6BE"
                BuildableName = "HTYCopyIssue.xcplugin"
                BlueprintName = "HTYCopyIssue"
                ReferencedContainer = "container:HTYCopyIssue.xcodeproj">
@@ -43,6 +57,15 @@
       buildConfiguration = "Debug">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "402F23681A7FBB2D007AB6BE"
+            BuildableName = "HTYCopyIssue.xcplugin"
+            BlueprintName = "HTYCopyIssue"
+            ReferencedContainer = "container:HTYCopyIssue.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -56,12 +79,14 @@
       allowLocationSimulation = "NO"
       viewDebuggingEnabled = "No">
       <PathRunnable
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.apple.dt.Xcode"
          FilePath = "/Applications/Xcode.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "890A4B3E171F031300AFE577"
+            BlueprintIdentifier = "402F23681A7FBB2D007AB6BE"
             BuildableName = "HTYCopyIssue.xcplugin"
             BlueprintName = "HTYCopyIssue"
             ReferencedContainer = "container:HTYCopyIssue.xcodeproj">
@@ -76,6 +101,15 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "402F23681A7FBB2D007AB6BE"
+            BuildableName = "HTYCopyIssue.xcplugin"
+            BlueprintName = "HTYCopyIssue"
+            ReferencedContainer = "container:HTYCopyIssue.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
