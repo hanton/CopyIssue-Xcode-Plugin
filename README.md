@@ -56,7 +56,3 @@ Uninstall via [Alcatraz](http://alcatraz.io/)
 OR
 
 `rm -r ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/HTYCopyIssue.xcplugin/`
-
-
-## TODO
-- Add 'Copy Issue' to right click's context menu in the editor
