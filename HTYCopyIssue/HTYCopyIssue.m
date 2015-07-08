@@ -272,26 +272,23 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     Class c = NSClassFromString(@"NSTableView");
 
     [c aspect_hookSelector:@selector(menuForEvent:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info, NSEvent *event) {
-        
         NSInvocation *invocation = info.originalInvocation;
         NSObject *object = info.instance;
         NSMenu *contextMenu;
         [invocation invoke];
         [invocation getReturnValue:&contextMenu];
-        CFRetain((__bridge CFTypeRef)(contextMenu)); // need to retain return value so it isn't dealloced before being released
+        if ([object isKindOfClass:NSClassFromString(@"IDENavigatorOutlineView")])
+            CFRetain((__bridge CFTypeRef)(contextMenu)); // need to retain return value so it isn't dealloced before being released
         if ([object isKindOfClass:NSClassFromString(@"IDENavigatorOutlineView")]) {
             id holder = [info.instance performSelector:(@selector(realDataSource))];
-            if ([holder isKindOfClass:NSClassFromString(@"IDEIssueNavigator")] && [contextMenu itemWithTitle:@"Copy Issue"]==nil)
-            {
+            if ([holder isKindOfClass:NSClassFromString(@"IDEIssueNavigator")] && [contextMenu itemWithTitle:@"Copy Issue"]==nil) {
                 [contextMenu insertItem:_copyIssueContextMenuItem atIndex:1];
                 [contextMenu insertItem:[NSMenuItem separatorItem] atIndex:2];
                 [contextMenu insertItem:_contextMenuSearchMenuItem atIndex:3];
                 [contextMenu insertItem:[NSMenuItem separatorItem] atIndex:4];
             }
         }
-        
         [invocation setReturnValue:&contextMenu];
-        
     } error:NULL];
 }
 
