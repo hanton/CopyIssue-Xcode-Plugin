@@ -11,7 +11,7 @@
 		402F236F1A7FBB2D007AB6BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 402F236E1A7FBB2D007AB6BE /* Foundation.framework */; };
 		402F23741A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = 402F23731A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme */; };
 		402F23771A7FBB2D007AB6BE /* HTYCopyIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = 402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */; };
-		FA1FAF991B3C722100AFC350 /* Aspects in Resources */ = {isa = PBXBuildFile; fileRef = FA1FAF981B3C722100AFC350 /* Aspects */; };
+		FA87259F1B5334DC0096E5C7 /* Aspects.m in Sources */ = {isa = PBXBuildFile; fileRef = FA87259E1B5334DC0096E5C7 /* Aspects.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,7 +22,8 @@
 		402F23731A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = HTYCopyIssue.xcscheme; path = HTYCopyIssue.xcodeproj/xcshareddata/xcschemes/HTYCopyIssue.xcscheme; sourceTree = SOURCE_ROOT; };
 		402F23751A7FBB2D007AB6BE /* HTYCopyIssue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTYCopyIssue.h; sourceTree = "<group>"; };
 		402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTYCopyIssue.m; sourceTree = "<group>"; };
-		FA1FAF981B3C722100AFC350 /* Aspects */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Aspects; sourceTree = "<group>"; };
+		FA87259D1B5334DC0096E5C7 /* Aspects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Aspects.h; path = Aspects/Aspects.h; sourceTree = "<group>"; };
+		FA87259E1B5334DC0096E5C7 /* Aspects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Aspects.m; path = Aspects/Aspects.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +42,7 @@
 		402F23601A7FBB2D007AB6BE = {
 			isa = PBXGroup;
 			children = (
+				FA8725A01B5334E20096E5C7 /* Aspects */,
 				402F23701A7FBB2D007AB6BE /* HTYCopyIssue */,
 				402F236B1A7FBB2D007AB6BE /* Frameworks */,
 				402F236A1A7FBB2D007AB6BE /* Products */,
@@ -69,7 +71,6 @@
 			children = (
 				402F23751A7FBB2D007AB6BE /* HTYCopyIssue.h */,
 				402F23761A7FBB2D007AB6BE /* HTYCopyIssue.m */,
-				FA1FAF981B3C722100AFC350 /* Aspects */,
 				402F23711A7FBB2D007AB6BE /* Supporting Files */,
 			);
 			path = HTYCopyIssue;
@@ -82,6 +83,16 @@
 				402F23731A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FA8725A01B5334E20096E5C7 /* Aspects */ = {
+			isa = PBXGroup;
+			children = (
+				FA87259D1B5334DC0096E5C7 /* Aspects.h */,
+				FA87259E1B5334DC0096E5C7 /* Aspects.m */,
+			);
+			name = Aspects;
+			path = HTYCopyIssue;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,7 +151,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA1FAF991B3C722100AFC350 /* Aspects in Resources */,
 				402F23741A7FBB2D007AB6BE /* HTYCopyIssue.xcscheme in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				402F23771A7FBB2D007AB6BE /* HTYCopyIssue.m in Sources */,
+				FA87259F1B5334DC0096E5C7 /* Aspects.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +205,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+					"-all_load",
+				);
 			};
 			name = Debug;
 		};
@@ -225,6 +241,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+					"-all_load",
+				);
 			};
 			name = Release;
 		};
