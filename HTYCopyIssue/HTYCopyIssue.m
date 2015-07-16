@@ -152,6 +152,9 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 {
     NSString *issueString = [self formattedIssueString];
     
+    if (!issueString)
+        return nil;
+    
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HTYStripQuotationMarks"]) return issueString;
 
     NSError* error = nil;
@@ -215,11 +218,12 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     NSArray* classes = [[NSArray alloc] initWithObjects:[NSString class], nil];
     NSDictionary* options = [NSDictionary dictionary];
     NSArray* copiedItems = [pasteboard readObjectsForClasses:classes options:options];
-    if (copiedItems != nil) {
+    if (copiedItems != nil && [copiedItems count] > 0) {
         // Regular Expression
         NSString* copiedString = copiedItems.firstObject;
         NSString* pattern = @"^\\S* ";
         NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        
         NSString* formatedString = [regex stringByReplacingMatchesInString:copiedString options:0 range:NSMakeRange(0, copiedString.length) withTemplate:@""]; // This is the line that crashes and it is because copiedItems is nil
         
         // Copy formatedString to the Pasteboard
