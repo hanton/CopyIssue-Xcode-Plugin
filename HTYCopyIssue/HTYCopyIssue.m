@@ -274,16 +274,18 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
 - (void)swizzleMenuForEventInNSTableView
 {
     Class c = NSClassFromString(@"NSTableView");
-
     [c aspect_hookSelector:@selector(menuForEvent:) withOptions:AspectPositionInstead usingBlock:^(id<AspectInfo> info, NSEvent *event) {
-        NSInvocation *invocation = info.originalInvocation;
         NSObject *object = info.instance;
-        NSMenu *contextMenu;
-        [invocation invoke];
-        [invocation getReturnValue:&contextMenu];
-        if ([object isKindOfClass:NSClassFromString(@"IDENavigatorOutlineView")])
-            CFRetain((__bridge CFTypeRef)(contextMenu)); // need to retain return value so it isn't dealloced before being released
-        if ([object isKindOfClass:NSClassFromString(@"IDENavigatorOutlineView")]) {
+        
+        if(![object isKindOfClass:NSClassFromString(@"IDENavigatorOutlineView")]) {
+            [info.originalInvocation invoke];
+        }
+        else {
+            NSInvocation *invocation = info.originalInvocation;
+            NSMenu *contextMenu;
+            [invocation invoke];
+            [invocation getReturnValue:&contextMenu];
+            CFRetain((__bridge CFTypeRef)(contextMenu)); // need to retain return value so it isn't dealloced before being returned
             id holder = [info.instance performSelector:(@selector(realDataSource))];
             if ([holder isKindOfClass:NSClassFromString(@"IDEIssueNavigator")] && [contextMenu itemWithTitle:@"Copy Issue"]==nil) {
                 [contextMenu insertItem:_copyIssueContextMenuItem atIndex:1];
@@ -291,8 +293,8 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
                 [contextMenu insertItem:_contextMenuSearchMenuItem atIndex:3];
                 [contextMenu insertItem:[NSMenuItem separatorItem] atIndex:4];
             }
+            [invocation setReturnValue:&contextMenu];
         }
-        [invocation setReturnValue:&contextMenu];
     } error:NULL];
 }
 
