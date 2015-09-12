@@ -288,6 +288,12 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
             CFRetain((__bridge CFTypeRef)(contextMenu)); // need to retain return value so it isn't dealloced before being returned
             id holder = [info.instance performSelector:(@selector(realDataSource))];
             if ([holder isKindOfClass:NSClassFromString(@"IDEIssueNavigator")] && [contextMenu itemWithTitle:@"Copy Issue"]==nil) {
+                if ([_copyIssueContextMenuItem menu] != nil) {
+                    NSMenu *oldContextMenu = [_copyIssueContextMenuItem menu];
+                    [oldContextMenu removeItem:_copyIssueContextMenuItem];
+                    [oldContextMenu removeItem:_contextMenuSearchMenuItem];
+                }
+                
                 [contextMenu insertItem:_copyIssueContextMenuItem atIndex:1];
                 [contextMenu insertItem:[NSMenuItem separatorItem] atIndex:2];
                 [contextMenu insertItem:_contextMenuSearchMenuItem atIndex:3];
