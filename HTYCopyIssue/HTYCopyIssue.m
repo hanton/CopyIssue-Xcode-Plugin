@@ -165,7 +165,11 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     }
     
     issueString = [regex stringByReplacingMatchesInString:issueString options:0 range:NSMakeRange(0, issueString.length) withTemplate:@""];
-    return issueString;
+    
+    NSArray *pathComponents = [issueString pathComponents];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"length" ascending:NO];
+    NSArray *sortedPathComponents = [pathComponents sortedArrayUsingDescriptors:@[descriptor]];
+    return sortedPathComponents[0];
 }
 
 #pragma mark - Actions
