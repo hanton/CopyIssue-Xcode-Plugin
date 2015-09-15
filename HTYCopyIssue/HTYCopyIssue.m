@@ -148,8 +148,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     return copyItem;
 }
 
-- (NSString *)searchString
-{
+- (NSString *)searchString {
     NSString *issueString = [self formattedIssueString];
     
     if (!issueString)
@@ -228,7 +227,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
         NSString* pattern = @"^\\S* ";
         NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
         
-        NSString* formatedString = [regex stringByReplacingMatchesInString:copiedString options:0 range:NSMakeRange(0, copiedString.length) withTemplate:@""]; // This is the line that crashes and it is because copiedItems is nil
+        NSString* formatedString = [regex stringByReplacingMatchesInString:copiedString options:0 range:NSMakeRange(0, copiedString.length) withTemplate:@""];
         
         // Copy formatedString to the Pasteboard
         NSArray* objectsToCopy = @[formatedString];
