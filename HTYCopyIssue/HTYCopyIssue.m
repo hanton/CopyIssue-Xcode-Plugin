@@ -164,11 +164,7 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     }
     
     issueString = [regex stringByReplacingMatchesInString:issueString options:0 range:NSMakeRange(0, issueString.length) withTemplate:@""];
-    
-    NSArray *pathComponents = [issueString pathComponents];
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"length" ascending:NO];
-    NSArray *sortedPathComponents = [pathComponents sortedArrayUsingDescriptors:@[descriptor]];
-    return sortedPathComponents[0];
+    return issueString;
 }
 
 #pragma mark - Actions
@@ -224,17 +220,21 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     if (copiedItems != nil && [copiedItems count] > 0) {
         // Regular Expression
         NSString* copiedString = copiedItems.firstObject;
-        NSString* pattern = @"^\\S* ";
-        NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
         
-        NSString* formatedString = [regex stringByReplacingMatchesInString:copiedString options:0 range:NSMakeRange(0, copiedString.length) withTemplate:@""];
+        NSArray *pathComponents = [copiedString pathComponents];
+        NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"length" ascending:NO];
+        NSArray *sortedPathComponents = [pathComponents sortedArrayUsingDescriptors:@[descriptor]];
         
-        // Copy formatedString to the Pasteboard
-        NSArray* objectsToCopy = @[formatedString];
+        NSString *copiedStringWithoutDirectories = sortedPathComponents[0];
+        NSString *pattern = @"^\\S*";
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:nil];
+        NSString *formattedString = [regex stringByReplacingMatchesInString:copiedStringWithoutDirectories options:0 range:NSMakeRange(0, copiedStringWithoutDirectories.length) withTemplate:@""];
+        
+        NSArray *objectsToCopy = @[formattedString];
         [pasteboard clearContents];
         [pasteboard writeObjects:objectsToCopy];
         
-        return formatedString;
+        return formattedString;
     }
     
     return nil;
