@@ -164,6 +164,15 @@ static NSString *const HTYStripQuotationMarksKey = @"HTYStripQuotationMarks";
     }
     
     issueString = [regex stringByReplacingMatchesInString:issueString options:0 range:NSMakeRange(0, issueString.length) withTemplate:@""];
+    
+    NSRegularExpression* weirdDoubleQuotesRegex = [NSRegularExpression regularExpressionWithPattern:@"“[^“]*”" options:0 error:&error];
+    if (!weirdDoubleQuotesRegex) {
+        NSLog(@"*** ERROR: Could not create regex: %@", error);
+        return nil;
+    }
+    
+    issueString = [weirdDoubleQuotesRegex stringByReplacingMatchesInString:issueString options:0 range:NSMakeRange(0, issueString.length) withTemplate:@""];
+    
     return issueString;
 }
 
